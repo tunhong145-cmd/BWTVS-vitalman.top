@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>預留成功 | TVBS 健康頻道</title>
+    <script>
+    // 1. 完整的 Facebook Pixel 基礎代碼 (不可縮略)
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+    // 初始化您的三個 Pixel ID
+    fbq('init', '1497404568540227');
+    fbq('init', '1676585166671912');
+    fbq('init', '4259702437625820');
+    fbq('track', 'PageView');
+
+    // 2. 核心 Purchase 追蹤邏輯
+    window.onload = function() {
+        // 從 localStorage 取得訂單 ID
+        const finalOrderID = localStorage.getItem('last_purchase_id') || ('ORD-T-' + Date.now());
+        
+        // 防止重複抓取 (會話內鎖定)
+        if (!sessionStorage.getItem('p_sent')) {
+            // 使用 setTimeout 延遲 500ms，確保 Pixel 腳本完全加載
+            setTimeout(function() {
+                if (typeof fbq === 'function') {
+                    fbq('track', 'Purchase', {
+                        value: 1398, 
+                        currency: 'TWD',
+                        order_id: finalOrderID
+                    });
+                    console.log('Purchase Sent with ID: ' + finalOrderID);
+                    
+                    sessionStorage.setItem('p_sent', 'true'); 
+                    localStorage.removeItem('last_purchase_id');
+                }
+            }, 500);
+        }
+    };
+    </script>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 100px 20px; background-color: #f5f5f5; }
+        .card { max-width: 450px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn { display: inline-block; margin-top: 25px; padding: 12px 35px; background: #003e8c; color: #fff; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 style="color: #28a745;">✓ 名額預留成功</h1>
+        <p>感謝您的諮詢，專員將在 24 小時內與您聯繫，請保持電話暢通。</p>
+        <a href="index.html" class="btn">返回首頁</a>
+    </div>
+</body>
+</html>
